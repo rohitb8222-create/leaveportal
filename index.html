@@ -8,41 +8,71 @@
     <style>
         * { box-sizing: border-box; font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; }
         body { background-color: #f0f2f5; display: flex; flex-direction: column; align-items: center; padding: 10px; }
-        .input-panel { background: #ffffff; width: 210mm; padding: 15px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 10px; border-top: 5px solid #2563eb; }
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
-        .input-group { display: flex; flex-direction: column; margin-bottom: 5px; }
-        .input-group label { font-size: 11px; font-weight: 600; margin-bottom: 3px; }
-        .input-group input, .input-group select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; outline: none; }
-        .page { width: 210mm; height: 297mm; background: white; padding: 12mm; position: relative; color: #000; border: 3px solid #000; display: flex; flex-direction: column; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .logo-main { font-size: 26px; font-weight: 700; letter-spacing: 2px; }
-        .heading-container { text-align: center; margin-bottom: 10px; }
-        .title-box { background: black; color: white; padding: 6px 45px; border-radius: 4px; font-size: 18px; font-weight: 700; display: inline-block; }
-        .form-row { display: flex; margin-bottom: 12px; align-items: flex-end; }
-        .label { font-weight: 700; font-size: 13px; white-space: nowrap; }
-        .val { flex-grow: 1; margin-left: 8px; font-weight: 600; font-size: 14px; border-bottom: 1.5px solid #000; min-height: 20px; padding-left: 5px; }
-        .square { border: 2.2px solid black; width: 32px; height: 32px; margin-left: 8px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; }
-        .auth-box { border: 2.2px solid black; padding: 12px; margin-top: 8px; }
-        .sign-area { display: flex; justify-content: space-between; margin-top: 25px; font-weight: 700; font-size: 13px; }
-        .print-btn { background: #10b981; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: 700; width: 100%; margin-top: 5px; font-size: 16px; }
-        #status { font-size: 10px; color: green; font-weight: bold; }
+
+        /* मोबाईल इनपुट पॅनेल - रिस्पॉन्सिव्ह */
+        .input-panel { 
+            background: #ffffff; width: 100%; max-width: 210mm; padding: 20px; 
+            border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+            margin-bottom: 20px; border-top: 6px solid #2563eb;
+        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 10px; }
+        .input-group { display: flex; flex-direction: column; margin-bottom: 8px; }
+        .input-group label { font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #333; }
+        .input-group input, .input-group select { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; outline: none; transition: 0.3s; }
+        .input-group input:focus { border-color: #2563eb; box-shadow: 0 0 5px rgba(37, 99, 235, 0.2); }
+
+        /* प्रिंट होणारे पेज - A4 फॉरमॅट */
+        .page { 
+            width: 210mm; height: 297mm; background: white; padding: 12mm; 
+            position: relative; color: #000; border: 3px solid #000; 
+            display: flex; flex-direction: column; box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            transform-origin: top center;
+        }
+        
+        /* मोबाईलवर रिव्ह्यू दिसण्यासाठी स्केल कमी करणे */
+        @media screen and (max-width: 210mm) {
+            .page { transform: scale(calc(window.innerWidth / 210)); margin-bottom: -150px; }
+        }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .logo-main { font-size: 26px; font-weight: 700; letter-spacing: 2px; line-height: 1; }
+        .heading-container { text-align: center; margin: 10px 0; }
+        .title-box { background: black; color: white; padding: 8px 50px; border-radius: 4px; font-size: 20px; font-weight: 700; display: inline-block; }
+
+        .form-row { display: flex; margin-bottom: 18px; align-items: flex-end; }
+        .label { font-weight: 700; font-size: 14px; white-space: nowrap; }
+        .val { flex-grow: 1; margin-left: 8px; font-weight: 600; font-size: 15px; border-bottom: 1.5px solid #000; min-height: 22px; padding-left: 5px; }
+        
+        .box-wrap { display: flex; align-items: center; margin-right: 30px; }
+        .square { border: 2.2px solid black; width: 35px; height: 35px; margin-left: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
+        
+        .auth-box { border: 2px solid black; padding: 15px; margin-top: 15px; }
+        .sign-area { display: flex; justify-content: space-between; margin-top: 40px; font-weight: 700; font-size: 14px; }
+        
+        .print-btn { background: #10b981; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: 700; width: 100%; margin-top: 15px; font-size: 16px; transition: 0.3s; }
+        .print-btn:hover { background: #059669; transform: translateY(-2px); }
+        #status { font-size: 11px; color: #059669; font-weight: bold; }
 
         @media print {
             @page { size: A4 portrait; margin: 0; }
             .input-panel { display: none; }
             body { background: white; padding: 0; margin: 0; }
-            .page { border: 3px solid #000; width: 210mm; height: 297mm; padding: 10mm; margin: 0; overflow: hidden; }
+            .page { border: 3px solid #000; width: 210mm; height: 297mm; padding: 12mm; margin: 0; overflow: hidden; transform: scale(1) !important; }
         }
     </style>
 </head>
 <body>
 
     <div class="input-panel">
-        <h3 style="font-size: 14px; color: #1e40af;">Google Sheet Connected Leave System <span id="status">● Loading Data...</span></h3>
+        <h3 style="font-size: 16px; color: #1e40af; display: flex; justify-content: space-between; align-items: center;">
+            Sumeet Elko Leave Portal
+            <span id="status">● Connecting Data...</span>
+        </h3>
+        
         <div class="grid">
-            <div class="input-group"><label>१. EMP Code टाका</label><input type="text" id="inID" placeholder="उदा. 101" onkeyup="updateLive()"></div>
+            <div class="input-group"><label>१. EMP Code</label><input type="text" id="inID" placeholder="Code" onkeyup="updateLive()"></div>
             <div class="input-group">
-                <label>२. रजेचा प्रकार निवडा</label>
+                <label>२. रजेचा प्रकार</label>
                 <select id="inLeaveType" onchange="updateLive()">
                     <option value="">निवडा</option>
                     <option value="Casual">Casual</option>
@@ -52,61 +82,68 @@
             </div>
             <div class="input-group"><label>From Date</label><input type="date" id="inFrom" onchange="updateLive()"></div>
             <div class="input-group"><label>To Date</label><input type="date" id="inTo" onchange="updateLive()"></div>
-            <div class="input-group"><label>Contact No</label><input type="text" id="inContact" onkeyup="updateLive()"></div>
+            <div class="input-group"><label>Contact No</label><input type="tel" id="inContact" onkeyup="updateLive()"></div>
             <div class="input-group"><label>रजेचे कारण</label><input type="text" id="inReason" onkeyup="updateLive()"></div>
         </div>
-        <div class="input-group" style="margin-top: 5px;">
-            <label>पत्ता</label>
+        <div class="input-group" style="margin-top: 10px;">
+            <label>पत्ता (Leave Period Address)</label>
             <input type="text" id="inAddress" onkeyup="updateLive()">
         </div>
-        <button class="print-btn" onclick="generatePDF()">PRINT / SAVE AS PDF</button>
+        <button class="print-btn" onclick="generatePDF()">PRINT / DOWNLOAD PDF</button>
     </div>
 
-    <div class="page">
+    <div class="page" id="printable">
         <div class="header">
             <div class="logo-area">
                 <div class="logo-main">SUMEET</div>
-                <div style="letter-spacing: 5px; font-weight: 700; font-size: 12px;">E L K O</div>
-                <div style="font-size: 9px;">Sustainable Living</div>
+                <div style="letter-spacing: 5px; font-weight: 700; font-size: 13px;">E L K O</div>
+                <div style="font-size: 10px;">Sustainable Living</div>
             </div>
-            <div style="text-align: right; font-weight: 700; font-size: 13px;">Date: <span id="outDate"></span></div>
+            <div style="text-align: right; font-weight: 700; font-size: 14px;">Date: <span id="outDate"></span></div>
         </div>
+
         <div class="heading-container"><div class="title-box">LEAVE APPLICATION</div></div>
+
         <div class="form-row">
             <span class="label">Name:</span><span id="outName" class="val"></span>
             <span class="label" style="margin-left:15px;">EMP ID:</span><span id="outID" class="val" style="flex-grow:0; width:60px;"></span>
             <span class="label" style="margin-left:15px;">DESIGNATION:</span><span id="outDesig" class="val"></span>
         </div>
-        <p style="font-weight: 700; font-size: 13px; margin-top: 5px;">Nature of leave requested for</p>
-        <div style="border-bottom: 2px solid black; margin-bottom: 10px;"></div>
-        <div style="display: flex; margin-bottom: 12px;">
+
+        <p style="font-weight: 700; font-size: 14px; margin-top: 15px;">Nature of leave requested for</p>
+        <div style="border-bottom: 2px solid black; margin-bottom: 12px;"></div>
+
+        <div style="display: flex; margin-bottom: 18px;">
             <div style="display:flex; align-items:center; margin-right:30px;"><span class="label">Casual</span><div class="square" id="tickCasual"></div></div>
             <div style="display:flex; align-items:center; margin-right:30px;"><span class="label">Sick</span><div class="square" id="tickSick"></div></div>
             <div style="display:flex; align-items:center;"><span class="label" style="font-size: 11px;">Others, Please Specify</span><div class="square" id="tickOthers" style="width: 80px;"></div></div>
         </div>
+
         <div class="form-row"><span class="label">Period For leave:</span><span id="outPeriod" class="val"></span></div>
         <div class="form-row"><span class="label">Reason For leave:</span><span id="outReason" class="val"></span></div>
-        <div style="border-bottom: 1.5px solid #eee; height: 5px; margin-bottom: 10px;"></div>
-        <p style="font-weight: 700; font-size: 13px;">Address and Contact Number during leave period</p>
-        <div class="form-row" style="margin-top: 8px;"><span class="label">Address :</span><span id="outAddress" class="val"></span></div>
+        <div style="border-bottom: 1.5px solid #eee; height: 10px; margin-bottom: 15px;"></div>
+
+        <p style="font-weight: 700; font-size: 14px;">Address and Contact Number during leave period</p>
+        <div class="form-row" style="margin-top: 10px;"><span class="label">Address :</span><span id="outAddress" class="val"></span></div>
         <div class="form-row"><span class="label">Contact No :</span><span id="outContact" class="val"></span></div>
+
         <div class="sign-area"><div>Applicant's Signature :-</div><div>Unit Officer- Sign</div></div>
+
         <div class="auth-box">
-            <span style="font-weight: 700; text-decoration: underline; margin-bottom: 10px; display: block; font-size: 13px;">Employer Authorisation</span>
-            <div style="text-align: right; margin-bottom: 15px; font-weight: 700; font-size: 12px;">Asst. Zonal Manager- Sign</div>
-            <p style="font-weight: 700; font-size: 13px;">Remarks from Departmental Head</p>
-            <div style="display: flex; align-items: center; margin: 8px 0;"><span class="label">Approved :</span><div class="square"></div><div style="flex-grow: 1; border-bottom: 1.5px solid black; margin-left: 20px; height: 10px;"></div></div>
+            <span style="font-weight: 700; text-decoration: underline; margin-bottom: 15px; display: block;">Employer Authorisation</span>
+            <div style="text-align: right; margin-bottom: 20px; font-weight: 700;">Asst. Zonal Manager- Sign</div>
+            <p style="font-weight: 700; font-size: 14px;">Remarks from Departmental Head</p>
+            <div style="display: flex; align-items: center; margin: 15px 0;"><span class="label">Approved :</span><div class="square"></div><div style="flex-grow: 1; border-bottom: 1.5px solid black; margin-left: 30px; height: 10px;"></div></div>
             <div style="display: flex; align-items: center;"><span class="label">Non Approved :</span><div class="square"></div></div>
-            <p style="font-weight: 700; font-size: 13px; margin-top: 10px;">Not sanctioned Reason :</p>
-            <div style="border-bottom: 1.5px solid black; height: 25px;"></div>
-            <div style="text-align: right; margin-top: 25px; font-weight: 700; font-size: 12px;">Head of Department-Sign</div>
+            <p style="font-weight: 700; font-size: 14px; margin-top: 20px;">Not sanctioned Reason :</p>
+            <div style="border-bottom: 1.5px solid black; height: 35px;"></div>
+            <div style="text-align: right; margin-top: 40px; font-weight: 700;">Head of Department-Sign</div>
         </div>
     </div>
 
     <script>
         let employeeDb = {};
         let currentEmpName = "Leave_Application";
-        // खालील लिंक तुमची Google Sheet CSV लिंकने बदला
         const sheetLink = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2SjGjEnnZLEJp-F3Uj2jMXkshfMw4_uzYp7VxU85w_Bhsou0JIqm5rmVsajg9rmG40nDD0d9H5hWG/pub?output=csv';
 
         window.onload = function() {
@@ -122,12 +159,17 @@
                     }
                 });
                 document.getElementById('status').innerText = "● Data Connected";
+            })
+            .catch(() => {
+                document.getElementById('status').innerText = "● Connection Error";
+                document.getElementById('status').style.color = "red";
             });
         };
 
         function updateLive() {
             const id = document.getElementById('inID').value.trim();
             const type = document.getElementById('inLeaveType').value;
+            
             if(employeeDb[id]) {
                 document.getElementById('outName').innerText = employeeDb[id].name;
                 document.getElementById('outDesig').innerText = employeeDb[id].desig;
@@ -137,20 +179,28 @@
                 document.getElementById('outDesig').innerText = "";
             }
             document.getElementById('outID').innerText = id;
+
             const from = document.getElementById('inFrom').value;
             const to = document.getElementById('inTo').value;
-            if(from && to) document.getElementById('outPeriod').innerText = from.split('-').reverse().join('/') + " To " + to.split('-').reverse().join('/');
+            if(from && to) {
+                const f = from.split('-').reverse().join('/');
+                const t = to.split('-').reverse().join('/');
+                document.getElementById('outPeriod').innerText = f + " To " + t;
+            }
+
             document.getElementById('outReason').innerText = document.getElementById('inReason').value;
             document.getElementById('outAddress').innerText = document.getElementById('inAddress').value;
             document.getElementById('outContact').innerText = document.getElementById('inContact').value;
             document.getElementById('outDate').innerText = new Date().toLocaleDateString('en-GB');
+
             document.getElementById('tickCasual').innerText = (type === "Casual") ? "✔" : "";
             document.getElementById('tickSick').innerText = (type === "Sick") ? "✔" : "";
             document.getElementById('tickOthers').innerText = (type === "Others") ? "✔" : "";
         }
 
         function generatePDF() {
-            document.title = currentEmpName + "_" + new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
+            const date = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
+            document.title = currentEmpName + "_" + date;
             window.print();
         }
     </script>
